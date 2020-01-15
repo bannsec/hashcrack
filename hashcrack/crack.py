@@ -24,7 +24,7 @@ def Crack(command):
             hashfile.write(config["hashes"])
             hashfile.flush()
 
-            runline = ["hashcat", "-D", "1", "-a", "0", "-m", types.hashcat[config["hash_type"]], hashfile.name, config["wordlist"]]
+            runline = ["hashcat", "-a", "0", "-m", types.hashcat[config["hash_type"]], hashfile.name, config["wordlist"]]
             subprocess.run(runline)
 
 
