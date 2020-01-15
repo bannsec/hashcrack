@@ -8,7 +8,7 @@ def Add(command):
     command = command.split(" ")
 
     if command[0] == "hash":
-        if command[1] == "":
+        if len(command) == 1:
             LOGGER.error("Specify hash in command.")
 
         else:

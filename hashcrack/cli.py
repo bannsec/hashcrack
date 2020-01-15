@@ -6,6 +6,7 @@ from .add import Add, ADD_COMPLETER
 from .set import Set, SET_COMPLETER
 from .show import Show, SHOW_COMPLETER
 from .identify import Identify
+from .crack import Crack, CRACK_COMPLETER
 from prompt_toolkit import PromptSession
 from prompt_toolkit.styles import Style
 from prompt_toolkit.completion import Completer, Completion, NestedCompleter
@@ -69,18 +70,20 @@ STYLE = Style.from_dict({
 
 MENU = {
         "add": Add,
+        "crack": Crack,
+        "exit": do_exit,
         "set": Set,
         "show": Show,
         "identify": Identify,
-        "exit": do_exit,
 }
 
 COMPLETER = NestedCompleter({
     'add': ADD_COMPLETER,
-    'set': SET_COMPLETER,
-    'show': SHOW_COMPLETER,
+    'crack': CRACK_COMPLETER,
     'exit': None,
     'identify': None,
+    'set': SET_COMPLETER,
+    'show': SHOW_COMPLETER,
 })
 
 if __name__ == "__main__":
