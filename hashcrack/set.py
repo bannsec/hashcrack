@@ -31,10 +31,19 @@ def Set(command):
         else:
             config["hash_type"] = hashtype
 
+    elif command[0] == "device":
+
+        if command[1] not in ["auto", "gpu", "cpu"]:
+            LOGGER.error("Valid device types: auto, gpu, cpu.")
+            return
+        
+        config['device'] = command[1]
+
 LOGGER = logging.getLogger(__name__)
 
 SET_COMPLETER = NestedCompleter({
     "wordlist": PathCompleter(),
     "hashfile": PathCompleter(),
     "hashtype": WordCompleter(types.hashcat.keys(), ignore_case=True, match_middle=True),
+    "device": WordCompleter(["auto", "cpu", "gpu"]),
 })

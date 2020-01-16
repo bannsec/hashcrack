@@ -24,8 +24,21 @@ def Crack(command):
             hashfile.write(config["hashes"])
             hashfile.flush()
 
-            runline = ["hashcat", "--show", "-a", "0", "-m", types.hashcat[config["hash_type"]], hashfile.name, config["wordlist"]]
-            subprocess.run(runline)
+            # TODO: Run --show when we know they're cracked...
+            runline = ["hashcat", "-a", "0", "-m", types.hashcat[config["hash_type"]]]
+            
+            if config["device"] == "cpu":
+                runline += ["--force", "-D", "1"]
+            elif config["device"] == "gpu":
+                runline += ["--force", "-D", "2"]
+
+            runline += [hashfile.name, config["wordlist"]]
+
+            try:
+                subprocess.run(runline)
+            except Exception as e:
+                LOGGER.error(e)
+                print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
 
 # https://github.com/intel/compute-runtime/blob/master/documentation/Neo_in_distributions.md
