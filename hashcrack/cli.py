@@ -7,11 +7,14 @@ from .set import Set, SET_COMPLETER
 from .show import Show, SHOW_COMPLETER
 from .identify import Identify
 from .crack import Crack, CRACK_COMPLETER
+from .help import Help
+from .version import version
 from prompt_toolkit import PromptSession
 from prompt_toolkit.styles import Style
 from prompt_toolkit.completion import Completer, Completion, NestedCompleter
 
 def main():
+    print(BANNER)
     setup()
     
     prompt = [
@@ -72,6 +75,7 @@ MENU = {
         "add": Add,
         "crack": Crack,
         "exit": do_exit,
+        "help": Help,
         "set": Set,
         "show": Show,
         "identify": Identify,
@@ -81,10 +85,24 @@ COMPLETER = NestedCompleter({
     'add': ADD_COMPLETER,
     'crack': CRACK_COMPLETER,
     'exit': None,
+    'help': None,
     'identify': None,
     'set': SET_COMPLETER,
     'show': SHOW_COMPLETER,
 })
+
+BANNER = r"""   ▄█    █▄       ▄████████    ▄████████    ▄█    █▄     ▄████████    ▄████████    ▄████████  ▄████████    ▄█   ▄█▄ 
+  ███    ███     ███    ███   ███    ███   ███    ███   ███    ███   ███    ███   ███    ███ ███    ███   ███ ▄███▀ 
+  ███    ███     ███    ███   ███    █▀    ███    ███   ███    █▀    ███    ███   ███    ███ ███    █▀    ███▐██▀   
+ ▄███▄▄▄▄███▄▄   ███    ███   ███         ▄███▄▄▄▄███▄▄ ███         ▄███▄▄▄▄██▀   ███    ███ ███         ▄█████▀    
+▀▀███▀▀▀▀███▀  ▀███████████ ▀███████████ ▀▀███▀▀▀▀███▀  ███        ▀▀███▀▀▀▀▀   ▀███████████ ███        ▀▀█████▄    
+  ███    ███     ███    ███          ███   ███    ███   ███    █▄  ▀███████████   ███    ███ ███    █▄    ███▐██▄   
+  ███    ███     ███    ███    ▄█    ███   ███    ███   ███    ███   ███    ███   ███    ███ ███    ███   ███ ▀███▄ 
+  ███    █▀      ███    █▀   ▄████████▀    ███    █▀    ████████▀    ███    ███   ███    █▀  ████████▀    ███   ▀█▀ 
+                                                                     ███    ███                           ▀         
+Version {version} (https://github.com/bannsec/hashcrack)
+Powered by: Hashcat (hashcat.net)
+""".format(version=version)
 
 if __name__ == "__main__":
     main()

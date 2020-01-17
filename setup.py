@@ -5,7 +5,9 @@ from codecs import open
 import os, sys, ast
 
 here = os.path.abspath(os.path.dirname(__file__))
-version = '0.1'
+
+with open(os.path.join(here, "hashcrack", "version.py"), "r") as f:
+    exec(f.read())
 
 #with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 #    long_description = f.read()
