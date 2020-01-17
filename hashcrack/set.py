@@ -39,6 +39,14 @@ def Set(command):
         
         config['device'] = command[1]
 
+    elif command[0] == "optimized":
+
+        if command[1] not in ["true", "false"]:
+            LOGGER.error("Valid optimized flags are: true, false")
+            return
+
+        config["optimized"] = True if command[1] == "true" else False
+
 LOGGER = logging.getLogger(__name__)
 
 SET_COMPLETER = NestedCompleter({
@@ -46,4 +54,5 @@ SET_COMPLETER = NestedCompleter({
     "hashfile": PathCompleter(),
     "hashtype": WordCompleter(types.hashcat.keys(), ignore_case=True, match_middle=True),
     "device": WordCompleter(["auto", "cpu", "gpu"]),
+    "optimized": WordCompleter(["true", "false"]),
 })

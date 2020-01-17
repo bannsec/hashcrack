@@ -36,6 +36,9 @@ class HashCatRunline:
         elif config["device"] == "gpu":
             runline += ["--force", "-D", "2"]
 
+        if config["optimized"]:
+            runline.append("-O")
+
         runline += self.flags + [self.hashfile.name, config["wordlist"]]
 
         return runline
@@ -67,6 +70,10 @@ def Crack(command):
             except Exception as e:
                 LOGGER.error(e)
                 print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
+
+    elif command[0] == "":
+        # Default action. Basically, try all things in an order.
+        Crack("crack wordlist")
 
 
 # https://github.com/intel/compute-runtime/blob/master/documentation/Neo_in_distributions.md

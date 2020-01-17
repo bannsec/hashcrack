@@ -8,6 +8,7 @@ def init():
         'hashes': b"",
         'wordlist': os.path.join(HERE, "static", "wordlists", "rockyou.txt"),
         'device': 'auto',
+        'optimized': True,
     }
 
 HERE = os.path.abspath(os.path.dirname(__file__))

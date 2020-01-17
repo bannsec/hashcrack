@@ -18,5 +18,8 @@ def Show(command):
     elif command[0] in ["cracked", ""]:
         Crack("crack show")
 
+    elif command[0] == "optimized":
+        print(config["optimized"])
+
 from .crack import Crack
-SHOW_COMPLETER = WordCompleter(['wordlist', 'hashes', 'hashtype', 'cracked'])
+SHOW_COMPLETER = WordCompleter(['wordlist', 'hashes', 'hashtype', 'cracked', 'optimized'])
