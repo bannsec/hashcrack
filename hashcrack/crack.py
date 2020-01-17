@@ -7,11 +7,11 @@ import tempfile
 import os
 from . import types
 
-def Crack(command):
-    command = command[5:].strip()
-    command = command.split(" ")
+class HashCatRunline:
+    """Behaves like string but takes care of creating/removing temporary files. Use as "with" statement."""
 
-    if command[0] == "wordlist":
+    def __init__(self, flags=None):
+
         if not os.path.isfile(config["wordlist"]):
             LOGGER.error("wordlist doesn't exist...")
             return
@@ -20,19 +20,47 @@ def Crack(command):
             LOGGER.error("Must set hashtype.")
             return
 
-        with tempfile.NamedTemporaryFile() as hashfile:
-            hashfile.write(config["hashes"])
-            hashfile.flush()
+        self.flags = flags or []
 
-            # TODO: Run --show when we know they're cracked...
-            runline = ["hashcat", "-a", "0", "-m", types.hashcat[config["hash_type"]]]
-            
-            if config["device"] == "cpu":
-                runline += ["--force", "-D", "1"]
-            elif config["device"] == "gpu":
-                runline += ["--force", "-D", "2"]
+    def __enter__(self):
+        self.hashfile = tempfile.NamedTemporaryFile()
 
-            runline += [hashfile.name, config["wordlist"]]
+        self.hashfile.write(config["hashes"])
+        self.hashfile.flush()
+
+        # TODO: Run --show when we know they're cracked...
+        runline = ["hashcat", "-a", "0", "-m", types.hashcat[config["hash_type"]]]
+        
+        if config["device"] == "cpu":
+            runline += ["--force", "-D", "1"]
+        elif config["device"] == "gpu":
+            runline += ["--force", "-D", "2"]
+
+        runline += self.flags + [self.hashfile.name, config["wordlist"]]
+
+        return runline
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        self.hashfile.close()
+
+
+def Crack(command):
+    command = command[5:].strip()
+    command = command.split(" ")
+
+    if command[0] == "wordlist":
+
+        with HashCatRunline() as runline:
+
+            try:
+                subprocess.run(runline)
+            except Exception as e:
+                LOGGER.error(e)
+                print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
+
+    elif command[0] == "show":
+
+        with HashCatRunline(flags=['--show']) as runline:
 
             try:
                 subprocess.run(runline)
@@ -47,4 +75,5 @@ def Crack(command):
 LOGGER = logging.getLogger(__name__)
 CRACK_COMPLETER = NestedCompleter({
     'wordlist': None,
+    'show': None,
 })
