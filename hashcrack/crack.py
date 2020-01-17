@@ -23,12 +23,10 @@ class HashCatRunline:
         self.flags = flags or []
 
     def __enter__(self):
-        self.hashfile = tempfile.NamedTemporaryFile()
+        self.hashfile = tempfile.NamedTemporaryFile(delete=False)
 
         self.hashfile.write(config["hashes"])
-        self.hashfile.flush()
 
-        # TODO: Run --show when we know they're cracked...
         runline = ["hashcat", "-a", "0", "-m", types.hashcat[config["hash_type"]]]
         
         if config["device"] == "cpu":
@@ -41,10 +39,13 @@ class HashCatRunline:
 
         runline += self.flags + [self.hashfile.name, config["wordlist"]]
 
+        # Gotta close here due to Windows not allowing multiple handles
+        self.hashfile.close()
+
         return runline
 
     def __exit__(self, exception_type, exception_value, traceback):
-        self.hashfile.close()
+        os.unlink(self.hashfile.name)
 
 
 def Crack(command):

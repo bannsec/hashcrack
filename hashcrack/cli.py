@@ -61,15 +61,28 @@ def setup():
 def do_exit(*args):
     exit(0)
 
+# Assume Windows can't handle better colors
+if platform.uname().system == "Windows":
 
-STYLE = Style.from_dict({
-    # User input (default text).
-    '':          '#8e89cb',
+    STYLE = Style.from_dict({
+        # User input (default text).
+        '':          'ansibrightblue',
 
-    # Prompt.
-    'hashcrack':  '#89a3cb',
-    'white':   '#ffffff',
-})
+        # Prompt.
+        'hashcrack':  'ansibrightmagenta',
+        'white':   'ansiwhite',
+    })
+
+else:
+
+    STYLE = Style.from_dict({
+        # User input (default text).
+        '':          '#8e89cb',
+
+        # Prompt.
+        'hashcrack':  '#89a3cb',
+        'white':   '#ffffff',
+    })
 
 MENU = {
         "add": Add,
