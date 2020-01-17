@@ -1,6 +1,7 @@
 
 import os
 import lzma
+import platform
 from .config import config, HERE
 from .add import Add, ADD_COMPLETER
 from .set import Set, SET_COMPLETER
