@@ -1,7 +1,9 @@
 
 import os
+import logging
 import lzma
 import platform
+import argparse
 from .config import config, HERE
 from .add import Add, ADD_COMPLETER
 from .set import Set, SET_COMPLETER
@@ -14,7 +16,19 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.styles import Style
 from prompt_toolkit.completion import Completer, Completion, NestedCompleter
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Wrapper to help with cracking hashes.")
+
+    parser.add_argument('hashfile', nargs='?', default=None,
+            help="File containing hashes to crack.")
+
+    args = parser.parse_args()
+
+    if args.hashfile is not None:
+        Set("set hashfile " + args.hashfile)
+
 def main():
+    parse_args()
     print(BANNER)
     setup()
     
@@ -61,6 +75,13 @@ def setup():
 
 def do_exit(*args):
     exit(0)
+
+logging.basicConfig(
+        level=logging.WARN,
+        format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+        datefmt='%m-%d %H:%M'
+)
+
 
 # Assume Windows can't handle better colors
 if platform.uname().system == "Windows":

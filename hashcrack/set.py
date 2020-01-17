@@ -14,7 +14,7 @@ def Set(command):
         if os.path.isfile(wordlist):
             config["wordlist"] = wordlist
         else:
-            LOGGER.error("Does not appear to be a valid file...")
+            LOGGER.error("Wordlist does not appear to be a valid file...")
 
     elif command[0] == "hashfile":
         hashfile = os.path.abspath(" ".join(command[1:]))
@@ -22,7 +22,7 @@ def Set(command):
             with open(hashfile, "rb") as f:
                 config["hashes"] += f.read()
         else:
-            LOGGER.error("Does not appear to be a valid file...")
+            LOGGER.error("Hashfile does not appear to be a valid file...")
 
     elif command[0] == "hashtype":
         hashtype = " ".join(command[1:])
