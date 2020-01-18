@@ -9,9 +9,11 @@ def init():
         'wordlist': os.path.join(HERE, "static", "wordlists", "rockyou.txt"),
         'device': 'auto',
         'optimized': True,
+        'rules': os.path.join(RULES_DIR, "OneRuleToRuleThemAll.rule"),
     }
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+RULES_DIR = os.path.join(HERE, "rules")
 
 try:
     config

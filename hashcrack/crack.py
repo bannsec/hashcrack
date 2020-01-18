@@ -62,6 +62,17 @@ def Crack(command):
                 LOGGER.error(e)
                 print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
+    if command[0] == "rules":
+
+        with HashCatRunline(flags=['-r', config['rules']]) as runline:
+
+            try:
+                subprocess.run(runline)
+            except Exception as e:
+                LOGGER.error(e)
+                print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
+
+
     elif command[0] == "show":
 
         with HashCatRunline(flags=['--show']) as runline:
@@ -74,7 +85,9 @@ def Crack(command):
 
     elif command[0] == "":
         # Default action. Basically, try all things in an order.
+        # Note: Default hashcat behavior is to check the pot file first. Once a password is cracked, future runs will simply not take up any cycles.
         Crack("crack wordlist")
+        Crack("crack rules")
 
 
 # https://github.com/intel/compute-runtime/blob/master/documentation/Neo_in_distributions.md
@@ -82,6 +95,7 @@ def Crack(command):
 # https://software.intel.com/en-us/articles/opencl-drivers#latest_CPU_runtime
 LOGGER = logging.getLogger(__name__)
 CRACK_COMPLETER = NestedCompleter({
-    'wordlist': None,
+    'rules': None,
     'show': None,
+    'wordlist': None,
 })
