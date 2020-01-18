@@ -10,6 +10,7 @@ def init():
         'device': 'auto',
         'optimized': True,
         'rules': os.path.join(RULES_DIR, "OneRuleToRuleThemAll.rule"),
+        'mask': '?a?a?a?a?a?a?a',
     }
 
 HERE = os.path.abspath(os.path.dirname(__file__))

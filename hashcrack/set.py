@@ -58,13 +58,38 @@ def Set(command):
         else:
             LOGGER.error("Can't find rules file at " + rulesfile)
 
+    elif command[0] == "mask":
+        if len(command) == 1:
+            print(MASK_HELP)
+            return
+
+        mask = " ".join(command[1:])
+        config['mask'] = mask
+
 LOGGER = logging.getLogger(__name__)
 
 SET_COMPLETER = NestedCompleter({
-    "wordlist": PathCompleter(),
+    "device": WordCompleter(["auto", "cpu", "gpu"]),
     "hashfile": PathCompleter(),
     "hashtype": WordCompleter(types.hashcat.keys(), ignore_case=True, match_middle=True),
-    "device": WordCompleter(["auto", "cpu", "gpu"]),
+    "mask": None,
     "optimized": WordCompleter(["true", "false"]),
     "rules": PathCompleter(get_paths=lambda:[RULES_DIR]),
+    "wordlist": PathCompleter(),
 })
+
+MASK_HELP = r"""usage: set mask <mask_here>
+
+Default mask charsets:
+    ?l = abcdefghijklmnopqrstuvwxyz
+    ?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    ?d = 0123456789
+    ?h = 0123456789abcdef
+    ?H = 0123456789ABCDEF
+    ?s = «space»!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+    ?a = ?l?u?d?s
+    ?b = 0x00 - 0xff
+
+Example:
+    Brute force 7 char password: ?a?a?a?a?a?a?a
+"""

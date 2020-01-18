@@ -10,7 +10,7 @@ from . import types
 class HashCatRunline:
     """Behaves like string but takes care of creating/removing temporary files. Use as "with" statement."""
 
-    def __init__(self, flags=None):
+    def __init__(self, a, flags=None):
 
         if not os.path.isfile(config["wordlist"]):
             LOGGER.error("wordlist doesn't exist...")
@@ -20,6 +20,7 @@ class HashCatRunline:
             LOGGER.error("Must set hashtype.")
             return
 
+        self.a = a
         self.flags = flags or []
 
     def __enter__(self):
@@ -27,7 +28,7 @@ class HashCatRunline:
 
         self.hashfile.write(config["hashes"])
 
-        runline = ["hashcat", "-a", "0", "-m", types.hashcat[config["hash_type"]]]
+        runline = ["hashcat", "-a", str(self.a), "-m", types.hashcat[config["hash_type"]]]
         
         if config["device"] == "cpu":
             runline += ["--force", "-D", "1"]
@@ -37,7 +38,12 @@ class HashCatRunline:
         if config["optimized"]:
             runline.append("-O")
 
-        runline += self.flags + [self.hashfile.name, config["wordlist"]]
+        if self.a == 3:
+            wordlist = config['mask']
+        else:
+            wordlist = config['wordlist']
+
+        runline += self.flags + [self.hashfile.name, wordlist]
 
         # Gotta close here due to Windows not allowing multiple handles
         self.hashfile.close()
@@ -54,7 +60,7 @@ def Crack(command):
 
     if command[0] == "wordlist":
 
-        with HashCatRunline() as runline:
+        with HashCatRunline(a=0) as runline:
 
             try:
                 subprocess.run(runline)
@@ -62,9 +68,9 @@ def Crack(command):
                 LOGGER.error(e)
                 print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
-    if command[0] == "rules":
+    elif command[0] == "rules":
 
-        with HashCatRunline(flags=['-r', config['rules']]) as runline:
+        with HashCatRunline(a=0, flags=['-r', config['rules']]) as runline:
 
             try:
                 subprocess.run(runline)
@@ -72,10 +78,23 @@ def Crack(command):
                 LOGGER.error(e)
                 print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
+    elif command[0] == "brute":
+
+        # Dynamically set mask
+        if len(command) > 1:
+            config['mask'] = command[1]
+
+        with HashCatRunline(a=3) as runline:
+
+            try:
+                subprocess.run(runline)
+            except Exception as e:
+                LOGGER.error(e)
+                print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
     elif command[0] == "show":
 
-        with HashCatRunline(flags=['--show']) as runline:
+        with HashCatRunline(a=0, flags=['--show']) as runline:
 
             try:
                 subprocess.run(runline)
@@ -89,12 +108,22 @@ def Crack(command):
         Crack("crack wordlist")
         Crack("crack rules")
 
+        # Brute up to 7 char password
+        Crack("crack brute ?a")
+        Crack("crack brute ?a?a")
+        Crack("crack brute ?a?a?a")
+        Crack("crack brute ?a?a?a?a")
+        Crack("crack brute ?a?a?a?a?a")
+        Crack("crack brute ?a?a?a?a?a?a")
+        Crack("crack brute ?a?a?a?a?a?a?a")
+
 
 # https://github.com/intel/compute-runtime/blob/master/documentation/Neo_in_distributions.md
 # intel-opencl-icd
 # https://software.intel.com/en-us/articles/opencl-drivers#latest_CPU_runtime
 LOGGER = logging.getLogger(__name__)
 CRACK_COMPLETER = NestedCompleter({
+    'brute': None,
     'rules': None,
     'show': None,
     'wordlist': None,
