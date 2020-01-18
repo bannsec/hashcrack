@@ -32,7 +32,7 @@ setup(
     ],
     keywords='password hashcat cracking',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    install_requires=['prettytable', 'appdirs', 'prompt-toolkit', 'hashid', 'hashcat-beta'],
+    install_requires=['prettytable', 'appdirs', 'prompt-toolkit', 'hashid', 'hashcat-beta', 'puremagic', 'scapy'],
     extras_require={
         'dev': ['ipython','twine','pytest','python-coveralls','coverage==4.5.4','pytest-cov','pytest-xdist','sphinxcontrib-napoleon', 'sphinx_rtd_theme','sphinx-autodoc-typehints'],
     },
