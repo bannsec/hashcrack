@@ -6,6 +6,7 @@ import subprocess
 import tempfile
 import os
 from . import types
+from .set import Set
 
 class HashCatRunline:
     """Behaves like string but takes care of creating/removing temporary files. Use as "with" statement."""
@@ -69,6 +70,9 @@ def Crack(command):
                 print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
     elif command[0] == "rules":
+        
+        if len(command) > 1:
+            Set("set rules " + " ".join(command[1:]))
 
         with HashCatRunline(a=0, flags=['-r', config['rules']]) as runline:
 
@@ -106,7 +110,9 @@ def Crack(command):
         # Default action. Basically, try all things in an order.
         # Note: Default hashcat behavior is to check the pot file first. Once a password is cracked, future runs will simply not take up any cycles.
         Crack("crack wordlist")
-        Crack("crack rules")
+
+        # More efficient but less exhaustive rule list
+        Crack("crack rules best64.rule")
 
         # Brute up to 7 char password
         Crack("crack brute ?a")
@@ -116,6 +122,9 @@ def Crack(command):
         Crack("crack brute ?a?a?a?a?a")
         Crack("crack brute ?a?a?a?a?a?a")
         Crack("crack brute ?a?a?a?a?a?a?a")
+
+        # Cracks more but is larger space
+        Crack("crack rules OneRuleToRuleThemAll.rule")
 
 
 # https://github.com/intel/compute-runtime/blob/master/documentation/Neo_in_distributions.md
