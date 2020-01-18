@@ -14,7 +14,7 @@ def init():
     }
 
 HERE = os.path.abspath(os.path.dirname(__file__))
-RULES_DIR = os.path.join(HERE, "rules")
+RULES_DIR = os.path.join(HERE, "static", "rules")
 
 try:
     config
