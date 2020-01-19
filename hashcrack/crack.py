@@ -136,6 +136,22 @@ def Crack(command):
                 LOGGER.error(e)
                 print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
+    elif command[0] == "prince":
+
+        with HashCatRunline(a=0, pipe=True) as runline:
+
+            try:
+                pp = subprocess.Popen(["pp64", "--case-permute", config["wordlist"]], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                subprocess.run(runline, stdin=pp.stdout)
+
+                # Clean up kwp
+                pp.terminate()
+                pp.communicate()
+
+            except Exception as e:
+                LOGGER.error(e)
+                print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
+
     elif command[0] == "":
         # Default action. Basically, try all things in an order.
         # Note: Default hashcat behavior is to check the pot file first. Once a password is cracked, future runs will simply not take up any cycles.
@@ -159,6 +175,9 @@ def Crack(command):
         # Cracks more but is larger space
         Crack("crack rules OneRuleToRuleThemAll.rule")
 
+        # Last gasp. Try out prince
+        Crack("crack prince")
+
 
 # https://github.com/intel/compute-runtime/blob/master/documentation/Neo_in_distributions.md
 # intel-opencl-icd
@@ -167,6 +186,7 @@ LOGGER = logging.getLogger(__name__)
 CRACK_COMPLETER = NestedCompleter({
     'brute': None,
     'kwp': None,
+    'prince': None,
     'rules': None,
     'show': None,
     'wordlist': None,
