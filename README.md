@@ -17,3 +17,27 @@ hashcrack > show
 # Set your own wordlist (uses rockyou by default)
 hashcrack > set wordlist <path_to_wordlist>
 ```
+
+# Cracking WPA2
+hashcrack will attempt to determine the correct settings and extract the
+needed hashes for you. One example of this currently is pcaps. With hashcrack,
+it's as simple as:
+
+```
+$ hashcrack ./my.pcap
+   ▄█    █▄       ▄████████    ▄████████    ▄█    █▄     ▄████████    ▄████████    ▄████████  ▄████████    ▄█   ▄█▄
+  ███    ███     ███    ███   ███    ███   ███    ███   ███    ███   ███    ███   ███    ███ ███    ███   ███ ▄███▀
+  ███    ███     ███    ███   ███    █▀    ███    ███   ███    █▀    ███    ███   ███    ███ ███    █▀    ███▐██▀
+ ▄███▄▄▄▄███▄▄   ███    ███   ███         ▄███▄▄▄▄███▄▄ ███         ▄███▄▄▄▄██▀   ███    ███ ███         ▄█████▀
+▀▀███▀▀▀▀███▀  ▀███████████ ▀███████████ ▀▀███▀▀▀▀███▀  ███        ▀▀███▀▀▀▀▀   ▀███████████ ███        ▀▀█████▄
+  ███    ███     ███    ███          ███   ███    ███   ███    █▄  ▀███████████   ███    ███ ███    █▄    ███▐██▄
+  ███    ███     ███    ███    ▄█    ███   ███    ███   ███    ███   ███    ███   ███    ███ ███    ███   ███ ▀███▄
+  ███    █▀      ███    █▀   ▄████████▀    ███    █▀    ████████▀    ███    ███   ███    █▀  ████████▀    ███   ▀█▀
+Version 0.4 (https://github.com/bannsec/hashcrack)
+Powered by: Hashcat (hashcat.net)
+
+hashcrack > crack
+```
+
+NOTE: You may have to adjust the `hashtype`, though the default will work for
+most PSK setups.

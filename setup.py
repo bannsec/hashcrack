@@ -9,9 +9,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "hashcrack", "version.py"), "r") as f:
     exec(f.read())
 
-#with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-#    long_description = f.read()
-long_description = "See website for more info."
+with open(path.join(here, 'pypi.rst'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='hashcrack',
@@ -34,7 +33,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=['prettytable', 'appdirs', 'prompt-toolkit', 'hashid', 'hashcat-beta', 'scapy'],
     extras_require={
-        'dev': ['ipython','twine','pytest','python-coveralls','coverage==4.5.4','pytest-cov','pytest-xdist','sphinxcontrib-napoleon', 'sphinx_rtd_theme','sphinx-autodoc-typehints'],
+        'dev': ['ipython','twine','pytest','python-coveralls','coverage==4.5.4','pytest-cov','pytest-xdist','sphinxcontrib-napoleon', 'sphinx_rtd_theme','sphinx-autodoc-typehints', 'restview'],
     },
     entry_points={
         'console_scripts': [
