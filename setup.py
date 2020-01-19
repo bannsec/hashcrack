@@ -9,7 +9,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "hashcrack", "version.py"), "r") as f:
     exec(f.read())
 
-with open(path.join(here, 'pypi.rst'), encoding='utf-8') as f:
+with open(os.path.join(here, 'pypi.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
