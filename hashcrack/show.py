@@ -27,5 +27,14 @@ def Show(command):
     elif command[0] == "mask":
         print(config["mask"])
 
+    elif command[0] == "kwp:basechars":
+        print(config["kwp:basechars"])
+
+    elif command[0] == "kwp:keymaps":
+        print(config["kwp:keymaps"])
+
+    elif command[0] == "kwp:routes":
+        print(config["kwp:routes"])
+
 from .crack import Crack
-SHOW_COMPLETER = WordCompleter(['cracked', 'hashes', 'hashtype', 'mask', 'optimized', 'rules', 'wordlist'])
+SHOW_COMPLETER = WordCompleter(['cracked', 'hashes', 'hashtype', 'kwp:basechars', 'kwp:keymaps', 'kwp:routes', 'mask', 'optimized', 'rules', 'wordlist'])

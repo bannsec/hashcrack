@@ -2,7 +2,7 @@
 import os
 import logging
 from prompt_toolkit.completion import Completer, Completion, NestedCompleter, PathCompleter, WordCompleter
-from .config import config, RULES_DIR
+from .config import config, RULES_DIR, KWP_BASECHARS_DIR, KWP_KEYMAPS_DIR, KWP_ROUTES_DIR
 from . import types
 
 def Set(command):
@@ -66,12 +66,48 @@ def Set(command):
         mask = " ".join(command[1:])
         config['mask'] = mask
 
+    elif command[0] == "kwp:basechars":
+        basecharsfile = " ".join(command[1:])
+
+        if not os.path.isabs(basecharsfile):
+            basecharsfile = os.path.abspath(os.path.join(KWP_BASECHARS_DIR, basecharsfile))
+
+        if os.path.isfile(basecharsfile):
+            config["kwp:basechars"] = basecharsfile
+        else:
+            LOGGER.error("Can't find basechars file at " + basecharsfile)
+
+    elif command[0] == "kwp:keymaps":
+        keymapsfile = " ".join(command[1:])
+
+        if not os.path.isabs(keymapsfile):
+            keymapsfile = os.path.abspath(os.path.join(KWP_KEYMAPS_DIR, keymapsfile))
+
+        if os.path.isfile(keymapsfile):
+            config["kwp:keymaps"] = keymapsfile
+        else:
+            LOGGER.error("Can't find keymaps file at " + keymapsfile)
+
+    elif command[0] == "kwp:routes":
+        routesfile = " ".join(command[1:])
+
+        if not os.path.isabs(routesfile):
+            routesfile = os.path.abspath(os.path.join(KWP_ROUTES_DIR, routesfile))
+
+        if os.path.isfile(routesfile):
+            config["kwp:routes"] = routesfile
+        else:
+            LOGGER.error("Can't find routes file at " + routesfile)
+
 LOGGER = logging.getLogger(__name__)
 
 SET_COMPLETER = NestedCompleter({
     "device": WordCompleter(["auto", "cpu", "gpu"]),
     "hashfile": PathCompleter(),
     "hashtype": WordCompleter(types.hashcat.keys(), ignore_case=True, match_middle=True),
+    "kwp:basechars": PathCompleter(get_paths=lambda:[KWP_BASECHARS_DIR]),
+    "kwp:keymaps": PathCompleter(get_paths=lambda:[KWP_KEYMAPS_DIR]),
+    "kwp:routes": PathCompleter(get_paths=lambda:[KWP_ROUTES_DIR]),
     "mask": None,
     "optimized": WordCompleter(["true", "false"]),
     "rules": PathCompleter(get_paths=lambda:[RULES_DIR]),

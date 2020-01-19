@@ -11,7 +11,15 @@ from .set import Set
 class HashCatRunline:
     """Behaves like string but takes care of creating/removing temporary files. Use as "with" statement."""
 
-    def __init__(self, a, flags=None):
+    def __init__(self, a, flags=None, pipe=False):
+        """
+
+        Args:
+            a (int): "a" value to use with hashcat
+            flags (list, optional): Extra flags to add
+            pipe (bool, optional): Is this piped input? If so, we will not put
+                in wordlist/mask. default: False
+        """
 
         if not os.path.isfile(config["wordlist"]):
             LOGGER.error("wordlist doesn't exist...")
@@ -23,6 +31,7 @@ class HashCatRunline:
 
         self.a = a
         self.flags = flags or []
+        self.pipe = pipe
 
     def __enter__(self):
         self.hashfile = tempfile.NamedTemporaryFile(delete=False)
@@ -44,7 +53,10 @@ class HashCatRunline:
         else:
             wordlist = config['wordlist']
 
-        runline += self.flags + [self.hashfile.name, wordlist]
+        runline += self.flags + [self.hashfile.name] 
+        
+        if not self.pipe:
+            runline.append(wordlist)
 
         # Gotta close here due to Windows not allowing multiple handles
         self.hashfile.close()
@@ -106,6 +118,24 @@ def Crack(command):
                 LOGGER.error(e)
                 print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
 
+    elif command[0] == "kwp":
+
+        with HashCatRunline(a=0, pipe=True) as runline:
+
+            try:
+                # Spin up kwp to feed into hashcat
+                kwp = subprocess.Popen(["kwp", config['kwp:basechars'], config['kwp:keymaps'], config['kwp:routes'], '-0', '-s', '1'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                #kwp.communicate()
+                subprocess.run(runline, stdin=kwp.stdout)
+
+                # Clean up kwp
+                kwp.terminate()
+                kwp.communicate()
+
+            except Exception as e:
+                LOGGER.error(e)
+                print("Be sure you have opencl drivers installed: sudo apt-get -y install ocl-icd-opencl-dev opencl-headers pocl-opencl-icd")
+
     elif command[0] == "":
         # Default action. Basically, try all things in an order.
         # Note: Default hashcat behavior is to check the pot file first. Once a password is cracked, future runs will simply not take up any cycles.
@@ -123,6 +153,9 @@ def Crack(command):
         Crack("crack brute ?a?a?a?a?a?a")
         Crack("crack brute ?a?a?a?a?a?a?a")
 
+        # Maybe keyboard walk?
+        Crack("crack kwp")
+
         # Cracks more but is larger space
         Crack("crack rules OneRuleToRuleThemAll.rule")
 
@@ -133,6 +166,7 @@ def Crack(command):
 LOGGER = logging.getLogger(__name__)
 CRACK_COMPLETER = NestedCompleter({
     'brute': None,
+    'kwp': None,
     'rules': None,
     'show': None,
     'wordlist': None,
