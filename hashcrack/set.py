@@ -23,6 +23,8 @@ def Set(command):
                 config["hashes"] += f.read()
         else:
             LOGGER.error("Hashfile does not appear to be a valid file...")
+        # Try to autoconfig it
+        autoconfig()
 
     elif command[0] == "hashtype":
         hashtype = " ".join(command[1:])
@@ -98,6 +100,8 @@ def Set(command):
             config["kwp:routes"] = routesfile
         else:
             LOGGER.error("Can't find routes file at " + routesfile)
+
+from .autoconfig import autoconfig
 
 LOGGER = logging.getLogger(__name__)
 
