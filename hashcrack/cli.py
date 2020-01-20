@@ -21,8 +21,13 @@ def parse_args():
 
     parser.add_argument('hashfile', nargs='?', default=None,
             help="File containing hashes to crack.")
+    parser.add_argument('--disable-autoconfig', action='store_true', default=False,
+            help="Don't attempt to auto configure hashcat based on the file.")
 
     args = parser.parse_args()
+
+    if args.disable_autoconfig:
+        config['autoconfig'] = False
 
     if args.hashfile is not None:
         Set("set hashfile " + args.hashfile)

@@ -4,6 +4,7 @@ import os
 def init():
     global config
     config = {
+        'autoconfig': True,
         'hash_type': None,
         'hashes': b"",
         'wordlist': os.path.join(HERE, "static", "wordlists", "rockyou.txt"),
