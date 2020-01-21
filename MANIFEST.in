@@ -1,6 +1,8 @@
 recursive-include hashcrack/static/ *
 include pypi.rst
+include hashcrack/autoconfig/*
 exclude hashcrack.egg-info/*
 exclude hashcrack/static/wordlists/rockyou.txt
 global-exclude *.swp
 global-exclude *.pyc
+global-exclude __pycache__

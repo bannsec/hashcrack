@@ -2,6 +2,7 @@
 from ..config import config
 from . import pcap
 from . import shadow
+from . import seven_zip
 
 def autoconfig():
 
@@ -14,4 +15,5 @@ def autoconfig():
 autoconfigs = [
     shadow,    
     pcap,
+    seven_zip,
 ]
