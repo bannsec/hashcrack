@@ -1,5 +1,6 @@
 
 import os
+import sys
 import logging
 import lzma
 import platform
@@ -23,6 +24,8 @@ def parse_args():
             help="File containing hashes to crack.")
     parser.add_argument('--disable-autoconfig', action='store_true', default=False,
             help="Don't attempt to auto configure hashcat based on the file.")
+    parser.add_argument('--crack', action='store_true', default=False,
+            help="Don't go to menu, just start auto-cracking .")
 
     args = parser.parse_args()
 
@@ -31,6 +34,10 @@ def parse_args():
 
     if args.hashfile is not None:
         Set("set hashfile " + args.hashfile)
+
+    if args.crack:
+        Crack("crack")
+        sys.exit()
 
 def main():
     parse_args()
