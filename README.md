@@ -41,3 +41,21 @@ hashcrack > crack
 
 NOTE: You may have to adjust the `hashtype`, though the default will work for
 most PSK setups.
+
+# Auto Configure
+
+``hashcrack`` will attempt to auto configure for certain types of input files.
+For instance, when trying to crack a WPA key, you must first extract that key
+from the pcap, then select the correct hash type in hashcat. ``hashcrack`` will
+do this type of configuration for you for various common file types.
+
+```sh
+# Auto crack wpa from a pcap
+hashcrack --crack ./some.pcap
+
+# Auto crack entries from a shadow file
+hashcrack --crack ./shadow
+
+# Auto crack an encrypted 7z file
+hashcrack --crack ./file.7z
+```
