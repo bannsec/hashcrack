@@ -26,6 +26,8 @@ def parse_args():
             help="Don't attempt to auto configure hashcat based on the file.")
     parser.add_argument('--crack', action='store_true', default=False,
             help="Don't go to menu, just start auto-cracking .")
+    parser.add_argument('--device', default=False, choices=('auto', 'gpu', 'cpu'),
+            help="Specify what device type to use (Default: auto)")
 
     args = parser.parse_args()
 
@@ -34,6 +36,9 @@ def parse_args():
 
     if args.hashfile is not None:
         Set("set hashfile " + args.hashfile)
+
+    if args.device:
+        Set("set device " + args.device)
 
     if args.crack:
         Crack("crack")
