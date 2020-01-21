@@ -66,3 +66,12 @@ do this type of configuration for you for various common file types.
 
     # Auto crack an encrypted 7z file
     hashcrack --crack ./file.7z
+
+John Jumbo
+===========
+
+John Jumbo is currently packed into this library (minus some of the processing
+scripts). The following commands are exported for use across Windows and
+Linux distros.
+
+``john, zip2john, rar2john, gpg2john, unafs, undrop, unshadow``

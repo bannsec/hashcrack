@@ -38,6 +38,13 @@ setup(
     entry_points={
         'console_scripts': [
             'hashcrack = hashcrack.cli:main',
+            'john = hashcrack.john:cli_john',
+            'zip2john = hashcrack.john:cli_zip2john',
+            'rar2john = hashcrack.john:cli_rar2john',
+            'gpg2john = hashcrack.john:cli_gpg2john',
+            'unafs = hashcrack.john:cli_unafs',
+            'undrop = hashcrack.john:cli_undrop',
+            'unshadow = hashcrack.john:cli_unshadow',
         ],
     },
     include_package_data = True,

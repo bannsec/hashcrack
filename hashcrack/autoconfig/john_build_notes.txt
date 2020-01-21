@@ -1,0 +1,25 @@
+John Jumbo is a large codebase. Unfortunately, it is also very intertwined, so pulling out specific parts becomes problematic.
+
+I used the latest full release of jumbo (https://github.com/magnumripper/JohnTheRipper/releases) 1.9.0-Jumbo-1.
+
+Compiling for Windows was mostly just:
+    - install cygwin with make, gcc, openssl/libssl packages
+    - normal compile
+    - Make a dist directory with john.exe and the following dlls: cygcrypto-1.1.dll  cyggcc_s-seh-1.dll  cyggomp-1.dll  cygwin1.dll  cygz.dll 
+        - dlls are in /usr/bin/*.dll
+    - tar it up: cd dist; tar caf john.exe.tar.xz *
+
+For both Linux and Windows, I changed the -O2 options to -Os, and stripped the resulting binary (for size reasons).
+
+For linux, I used gzexe to reduce the size further
+For Windows, I use xz and manually extract it to use it.
+
+John seems to look at it's own process name to determine what to do. For instance, zip2john is just a symlink to john. Thus changing the binary name changes the startup behavior.
+
+The following are all argv[0] names john accepts
+ - zip2john
+ - rar2john
+ - dmg2john
+ - uaf2john
+ - wpapcap2john
+ - hccap2john.exe
