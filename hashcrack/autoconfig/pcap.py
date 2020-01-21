@@ -7,6 +7,8 @@ import tempfile
 import subprocess
 import os
 
+from prompt_toolkit import print_formatted_text as print, HTML
+
 def run():
 
     pcap_headers = [b'\xa1\xb2\xc3\xd4', b'\xd4\xc3\xb2\xa1', b'\xa1\xb2\xcd4', b'\n\r\r\n`\x00\x00\x00M<+\x1a']
@@ -40,6 +42,7 @@ def run():
         # Guessing at the protocol for now.
         # TODO: Use scapy to guess better
         config['hash_type'] = 'WPA-EAPOL-PBKDF2'
+        print(HTML("<ansigreen>Autoconfigured pcap</ansigreen>"))
 
         # Clean-up temp files
         os.unlink(temp.name)

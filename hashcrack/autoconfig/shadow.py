@@ -3,6 +3,8 @@ import logging
 from ..config import config
 from .. import types
 
+from prompt_toolkit import print_formatted_text as print, HTML
+
 def run():
 
     hashtype = None
@@ -34,5 +36,6 @@ def run():
     # If we made it this far, this should be a strong match. Go with it.
     if hashtype is not None:
         config['hash_type'] = hashtype
+        print(HTML("<ansigreen>Autoconfigured shadow file</ansigreen>"))
 
 LOGGER = logging.getLogger(__name__)
