@@ -24,10 +24,12 @@ def parse_args():
             help="File containing hashes to crack.")
     parser.add_argument('--disable-autoconfig', action='store_true', default=False,
             help="Don't attempt to auto configure hashcat based on the file.")
-    parser.add_argument('--crack', action='store_true', default=False,
-            help="Don't go to menu, just start auto-cracking .")
+    parser.add_argument('--crack', nargs="*", default=False,
+            help="Don't go to menu, just start auto-cracking. Optionally specify which type of cracking to run such as wordlist.")
     parser.add_argument('--device', default=False, choices=('auto', 'gpu', 'cpu'),
             help="Specify what device type to use (Default: auto)")
+    parser.add_argument('--show', default=False, action='store_true',
+            help="Just show cracked hashes.")
 
     args = parser.parse_args()
 
@@ -40,8 +42,19 @@ def parse_args():
     if args.device:
         Set("set device " + args.device)
 
-    if args.crack:
-        Crack("crack")
+    if args.crack is not False:
+        command = "crack"
+
+        if args.crack == []:
+            args.crack.append("")
+
+        for c in args.crack:
+            Crack("crack " + c)
+
+        sys.exit()
+
+    if args.show:
+        Crack("crack show")
         sys.exit()
 
 def main():
