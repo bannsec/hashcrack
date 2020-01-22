@@ -1,5 +1,6 @@
 
 import logging
+import subprocess
 from ..config import config, HERE, PLATFORM
 from ..common import NamedTemporaryFile
 from ..john import John
@@ -33,11 +34,24 @@ def run():
         print(HTML("<ansigreen>Autoconfigured rar</ansigreen>"))
 
     elif hashtype.lower()== b"rar3":
+
+        enctype = hashes.split(b"$")[2].split(b"*")[1]
+
         # RAR3-hp
-        hashtype = next(name for name in types.hashcat if types.hashcat[name] == '12500')
-        config['hash_type'] = hashtype
-        config['hashes'] = b":".join(out.split(b":")[1:])
-        print(HTML("<ansigreen>Autoconfigured rar</ansigreen>"))
+        if enctype == b"0":
+            hashtype = next(name for name in types.hashcat if types.hashcat[name] == '12500')
+            config['hash_type'] = hashtype
+            config['hashes'] = b":".join(out.split(b":")[1:])
+            print(HTML("<ansigreen>Autoconfigured rar</ansigreen>"))
+
+        elif enctype == b"1":
+            print(HTML("<ansired>Hashcat current does not support rar -p (rar3) hashes.</ansired>"))
+            return
+
+        else:
+            print(HTML("<ansired>Unexpected rar3 type of {} discovered. Please submit the following hash and an example binary to https://github.com/bannsec/hashcrack/issues .</ansired>".format(enctype)))
+            print(hashes)
+            return
 
     else:
         print(HTML("<ansiyellow>Unhandled rar type of {} discovered. Please submit the following hash and an example binary to https://github.com/bannsec/hashcrack/issues .</ansiyellow>".format(hashtype)))
