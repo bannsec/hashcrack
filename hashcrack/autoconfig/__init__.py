@@ -4,6 +4,7 @@ from . import pcap
 from . import shadow
 from . import seven_zip
 from . import zip
+from . import rar
 
 def autoconfig():
 
@@ -18,4 +19,5 @@ autoconfigs = [
     pcap,
     seven_zip,
     zip,
+    rar,
 ]
