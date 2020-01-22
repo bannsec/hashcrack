@@ -8,7 +8,7 @@ import shutil
 import tarfile
 import sys
 import subprocess
-from .config import HERE
+from .config import HERE, PLATFORM
 
 class John:
 
@@ -103,4 +103,3 @@ def cli_unshadow():
         subprocess.run([john] + args)
 
 LOGGER = logging.getLogger(__name__)
-PLATFORM = platform.uname().system

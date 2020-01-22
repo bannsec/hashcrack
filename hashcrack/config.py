@@ -1,5 +1,6 @@
 
 import os
+import platform
 
 def init():
     global config
@@ -23,6 +24,8 @@ KWP_DIR = os.path.join(HERE, "static", "kwp")
 KWP_BASECHARS_DIR = os.path.join(KWP_DIR, "basechars")
 KWP_KEYMAPS_DIR = os.path.join(KWP_DIR, "keymaps")
 KWP_ROUTES_DIR = os.path.join(KWP_DIR, "routes")
+
+PLATFORM = platform.uname().system
 
 try:
     config
