@@ -67,6 +67,12 @@ do this type of configuration for you for various common file types.
     # Auto crack an encrypted 7z file
     hashcrack --crack ./file.7z
 
+    # Auto crack an encrypted rar file
+    hashcrack --crack ./file.rar
+
+    # Auto crack an encrypted zip file
+    hashcrack --crack ./file.zip
+
 John Jumbo
 ===========
 
